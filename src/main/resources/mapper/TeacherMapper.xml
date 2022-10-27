@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.dao.TeacherMapper">
+    <resultMap id="baseMap" type="com.cn.pojo.vo.Teacher">
+        <id column="id" property="id"></id>
+        <result column="teach_name" property="teachName"></result>
+        <result column="teach_description" property="teachDescription"></result>
+        <result column="teach_image" property="teachImage"></result>
+        <result column="createtime" property="createTime"></result>
+        <result column="updatetime" property="updateTime"></result>
+    </resultMap>
+
+
+    <select id="findAll" resultMap="baseMap">
+        select * from qf_teach
+    </select>
+</mapper>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.dao.CourseMapper">
+
+    <resultMap id="baseMap" type="com.cn.pojo.vo.Course">
+        <id column="id" property="id"></id>
+        <result column="course_name" property="courseName"></result>
+        <result column="course_pic" property="coursePic"></result>
+        <result column="course_description" property="courseDescription"></result>
+        <result column="course_teachs" property="courseTeacher"></result>
+        <result column="users" property="users"></result>
+        <result column="course_status" property="status"></result>
+        <result column="createtime" property="createTime"></result>
+        <result column="updatetime" property="updateTime"></result>
+        <result column="pay" property="pay"></result>
+    </resultMap>
+
+    <resultMap id="course" type="com.cn.pojo.vo.Course">
+        <id column="id" property="id"></id>
+        <result column="course_name" property="courseName"></result>
+        <result column="course_pic" property="coursePic"></result>
+        <result column="course_description" property="courseDescription"></result>
+        <result column="course_teachs" property="courseTeacher"></result>
+        <result column="users" property="users"></result>
+        <result column="course_status" property="status"></result>
+        <result column="createtime" property="createTime"></result>
+        <result column="updatetime" property="updateTime"></result>
+        <result column="pay" property="pay"></result>
+
+        <association property="teacher" javaType="com.cn.pojo.vo.Teacher">
+            <id property="id" column="teach_id"></id>
+            <result property="teachImage" column="teach_image"></result>
+            <result property="teachName" column="teach_name"></result>
+            <result property="teachDescription" column="teach_description"></result>
+        </association>
+    </resultMap>
+
+    <select id="findCourseByClassify" resultMap="baseMap">
+        SELECT qc.* FROM
+        qf_course qc,qf_classify qy, qf_course_classify qcy
+        WHERE
+            qc.`id`=qcy.course_id AND
+            qcy.classify_id =qy.id AND
+            qy.`id`=#{id}
+    </select>
+
+
+    <select id="findCourseDetailById" resultMap="course">
+
+        SELECT qc.*,qt.`teach_image`,qt.`teach_name`,qt.`id` AS teach_id FROM qf_course qc LEFT JOIN qf_teach qt ON qc.`id`=qt.`id` WHERE qc.`id`=#{id}
+
+    </select>
+
+
+    <select id="findByCourseId" resultMap="baseMap">
+        select * from qf_course where id=#{id}
+    </select>
+
+
+
+</mapper>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cn.dao.OrderMapper">
+    <resultMap id="order" type="com.cn.pojo.vo.Order">
+        <id property="orderId" column="orderid"></id>
+        <result property="orderPay" column="order_pay"></result>
+        <result property="userId" column="userid"></result>
+        <result property="orderStatus" column="order_status"></result>
+        <result property="createTime" column="createtime"></result>
+
+        <collection property="orderDetail" ofType="com.cn.pojo.vo.OrderDetail">
+            <id property="orderDetailId" column="order_detail_id"></id>
+            <result property="orderId" column="orderid"></result>
+            <result property="courseId" column="courseid"></result>
+            <result property="createTime" column="createtime"></result>
+            <association property="course" javaType="com.cn.pojo.vo.Course">
+                <id column="id" property="id"></id>
+                <result column="course_name" property="courseName"></result>
+                <result column="course_pic" property="coursePic"></result>
+                <result column="course_description" property="courseDescription"></result>
+                <result column="course_teachs" property="courseTeacher"></result>
+                <result column="users" property="users"></result>
+                <result column="course_status" property="status"></result>
+                <result column="createtime" property="createTime"></result>
+                <result column="updatetime" property="updateTime"></result>
+                <result column="pay" property="pay"></result>
+            </association>
+        </collection>
+
+    </resultMap>
+
+    <insert id="insertOrder" parameterType="com.cn.pojo.vo.Order">
+        insert into qf_order values (#{orderId},#{orderPay},#{userId},#{orderStatus},#{createTime})
+    </insert>
+
+
+    <select id="findOrderByUserId" resultMap="order">
+
+        SELECT * FROM
+        qf_order qr,qf_order_detail qod,qf_course qc
+        WHERE
+            qc.id=qod.courseid AND
+            qr.orderid=qod.orderid AND
+            qr.order_status=1 AND
+            qr.userid=#{id}
+    </select>
+
+
+    <select id="findById" resultMap="order">
+        select * from qf_order where orderid=#{orderid}
+    </select>
+
+    <update id="updateOrderStatus" parameterType="com.cn.pojo.vo.Order">
+        update qf_order
+        set
+        <if test="orderStatus !=null">
+            order_status=#{orderStatus}
+        </if>
+        <where>
+            orderid=#{orderId}
+        </where>
+    </update>
+</mapper>
